@@ -1,0 +1,114 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--background);
+}
+
+.sidebar {
+  width: 280px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.logo {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 3rem;
+}
+
+.logo span:first-child { color: var(--foreground); }
+.logo span:last-child {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.navLink {
+  padding: 0.8rem 1.2rem;
+  border-radius: 12px;
+  font-weight: 500;
+  color: var(--foreground-muted);
+  transition: all 0.2s ease;
+}
+
+.navLink:hover {
+  background: var(--surface-hover);
+  color: var(--foreground);
+}
+
+.sidebarFooter {
+  margin-top: auto;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+
+.sidebarFooter p {
+  font-size: 0.85rem;
+  color: var(--foreground-muted);
+  margin-bottom: 1rem;
+  word-break: break-all;
+}
+
+.logoutBtn {
+  color: #ef4444;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.logoutBtn:hover {
+  text-decoration: underline;
+}
+
+.content {
+  flex: 1;
+  padding: 3rem;
+  overflow-y: auto;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.pageHeader h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.pageHeader p {
+  color: var(--foreground-muted);
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 1.5rem;
+  }
+  
+  .nav {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+}

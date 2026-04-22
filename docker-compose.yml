@@ -1,0 +1,21 @@
+services:
+  biblioteca_web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: biblioteca_web
+    restart: unless-stopped
+    env_file:
+      - ../shared/.env
+      - .env
+    environment:
+      - DATABASE_URL=postgresql://homelab:15af964c35443f89739de8d671c0590d7b081525e07c36aefdc1a55bbeb80e81@postgres_shared:5432/homelab?schema=biblioteca
+      - NEXTAUTH_URL=http://biblioteca.joanmata.com
+      - NEXTAUTH_SECRET=a78f24b21e8d4a5c9b6e3f2d1c0b9a8f
+    networks:
+      - proxy-net
+
+networks:
+  proxy-net:
+    external: true
+    name: proxy-net
