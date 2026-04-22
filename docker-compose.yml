@@ -5,17 +5,34 @@ services:
       dockerfile: Dockerfile
     container_name: biblioteca_web
     restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:3000"
     env_file:
-      - ../shared/.env
       - .env
     environment:
-      - DATABASE_URL=postgresql://homelab:15af964c35443f89739de8d671c0590d7b081525e07c36aefdc1a55bbeb80e81@postgres_shared:5432/homelab?schema=biblioteca
-      - NEXTAUTH_URL=http://biblioteca.joanmata.com
-      - NEXTAUTH_SECRET=a78f24b21e8d4a5c9b6e3f2d1c0b9a8f
+      - DATABASE_URL=${DATABASE_URL}
+      - NEXTAUTH_URL=${NEXTAUTH_URL}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
     networks:
-      - proxy-net
+      - biblioteca-net
+
+# Optional: Uncomment this if you don't have an external Postgres database
+#   db:
+#     image: postgres:15-alpine
+#     container_name: biblioteca_db
+#     restart: unless-stopped
+#     environment:
+#       POSTGRES_USER: user
+#       POSTGRES_PASSWORD: password
+#       POSTGRES_DB: biblioteca
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+#     networks:
+#       - biblioteca-net
 
 networks:
-  proxy-net:
-    external: true
-    name: proxy-net
+  biblioteca-net:
+    driver: bridge
+
+# volumes:
+#   postgres_data:
