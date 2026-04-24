@@ -44,22 +44,46 @@ export default function WishlistList({ initialBooks }: { initialBooks: Book[] })
   const saveOrder = async (sortedBooks: Book[]) => {
     setSaving(true);
     try {
-      // Update each book with its new index
-      const updates = sortedBooks.map((book, idx) => {
-        return fetch(`/api/books/${book.id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ wishlistOrder: idx }),
-        });
+      const res = await fetch("/api/books/reorder", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          orders: sortedBooks.map((book, idx) => ({ id: book.id, wishlistOrder: idx })),
+        }),
       });
 
-      await Promise.all(updates);
-      router.refresh();
+      if (res.ok) {
+        router.refresh();
+      }
     } catch (error) {
       console.error("Error saving wishlist order:", error);
     } finally {
       setSaving(false);
     }
+  };
+
+  // --- Native Drag and Drop ---
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+
+  const onDragStart = (index: number) => {
+    setDraggedIndex(index);
+  };
+
+  const onDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    if (draggedIndex === null || draggedIndex === index) return;
+
+    const newBooks = [...books];
+    const item = newBooks.splice(draggedIndex, 1)[0];
+    newBooks.splice(index, 0, item);
+    
+    setBooks(newBooks);
+    setDraggedIndex(index);
+  };
+
+  const onDragEnd = () => {
+    setDraggedIndex(null);
+    saveOrder(books);
   };
 
   if (books.length === 0) {
@@ -74,7 +98,16 @@ export default function WishlistList({ initialBooks }: { initialBooks: Book[] })
     <div className={styles.list}>
       {saving && <div className={styles.savingOverlay}>Guardando orden...</div>}
       {books.map((book, index) => (
-        <div key={book.id} className={`${styles.item} glass animate-fade-in`} style={{ animationDelay: `${index * 0.05}s` }}>
+        <div 
+          key={book.id} 
+          className={`${styles.item} glass animate-fade-in ${draggedIndex === index ? styles.dragging : ""}`} 
+          style={{ animationDelay: `${index * 0.05}s` }}
+          draggable
+          onDragStart={() => onDragStart(index)}
+          onDragOver={(e) => onDragOver(e, index)}
+          onDragEnd={onDragEnd}
+        >
+          <div className={styles.dragHandle} title="Arrastra para ordenar">⠿</div>
           <div className={styles.rank}>{index + 1}</div>
           <div className={styles.coverMini}>
             {book.photoUrl ? (

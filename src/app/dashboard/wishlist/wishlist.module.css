@@ -30,6 +30,31 @@
   border-color: var(--primary);
 }
 
+.dragging {
+  opacity: 0.5;
+  background: rgba(var(--primary-rgb), 0.1) !important;
+  border: 1px dashed var(--primary) !important;
+  cursor: grabbing;
+}
+
+.dragHandle {
+  cursor: grab;
+  color: var(--foreground-muted);
+  font-size: 1.2rem;
+  padding: 0.5rem;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+
+.dragHandle:hover {
+  opacity: 1;
+  color: var(--primary);
+}
+
+.dragHandle:active {
+  cursor: grabbing;
+}
+
 .rank {
   font-size: 1.5rem;
   font-weight: 800;
