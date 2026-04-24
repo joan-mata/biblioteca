@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./AddBookModal.module.css";
 import StarRating from "./StarRating";
@@ -35,6 +35,7 @@ export default function AddBookModal({ onClose, bookToEdit }: AddBookModalProps)
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
+  const searchAbortController = useRef<AbortController | null>(null);
 
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -88,24 +89,51 @@ export default function AddBookModal({ onClose, bookToEdit }: AddBookModalProps)
   }, [searchQuery]);
 
   const searchBooks = async (query: string) => {
+    // Cancel previous request if any
+    if (searchAbortController.current) {
+      searchAbortController.current.abort();
+    }
+
+    const controller = new AbortController();
+    searchAbortController.current = controller;
+
     setIsSearching(true);
     setSearchError(null);
     try {
-      const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=5`);
+      const res = await fetch(
+        `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=5`,
+        { signal: controller.signal }
+      );
+      
       if (!res.ok) {
+        // If it's a rate limit (429), give a specific message
+        if (res.status === 429) {
+           throw new Error("Demasiadas búsquedas. Espera unos segundos.");
+        }
         throw new Error(`Error de API: ${res.status}`);
       }
+      
       const data = await res.json();
-      setSearchResults(data.items || []);
-      if (!data.items) {
-        // No results is handled in UI, but we ensure list is empty
-        setSearchResults([]);
+      
+      // Only update if this is still the active request
+      if (!controller.signal.aborted) {
+        setSearchResults(data.items || []);
+        if (!data.items) {
+          setSearchResults([]);
+        }
       }
     } catch (error: any) {
+      if (error.name === 'AbortError') {
+        return; // Ignore cancelled requests
+      }
       console.error("Search error:", error);
-      setSearchError("Hubo un problema al conectar con la base de datos de libros. Revisa tu conexión.");
+      setSearchError(error.message.includes("Demasiadas") 
+        ? error.message 
+        : "Hubo un problema al conectar con la base de datos de libros. Revisa tu conexión.");
     } finally {
-      setIsSearching(false);
+      if (!controller.signal.aborted) {
+        setIsSearching(false);
+      }
     }
   };
 
