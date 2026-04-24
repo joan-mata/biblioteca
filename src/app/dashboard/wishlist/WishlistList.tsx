@@ -27,6 +27,20 @@ export default function WishlistList({ initialBooks }: { initialBooks: Book[] })
     await saveOrder(newBooks);
   };
 
+  const moveToExtreme = async (index: number, extreme: 'top' | 'bottom') => {
+    const newBooks = [...books];
+    const item = newBooks.splice(index, 1)[0];
+    
+    if (extreme === 'top') {
+      newBooks.unshift(item);
+    } else {
+      newBooks.push(item);
+    }
+
+    setBooks(newBooks);
+    await saveOrder(newBooks);
+  };
+
   const saveOrder = async (sortedBooks: Book[]) => {
     setSaving(true);
     try {
@@ -78,6 +92,7 @@ export default function WishlistList({ initialBooks }: { initialBooks: Book[] })
               onClick={() => moveBook(index, 'up')} 
               disabled={index === 0 || saving}
               className={styles.actionBtn}
+              title="Subir uno"
             >
               ↑
             </button>
@@ -85,8 +100,25 @@ export default function WishlistList({ initialBooks }: { initialBooks: Book[] })
               onClick={() => moveBook(index, 'down')} 
               disabled={index === books.length - 1 || saving}
               className={styles.actionBtn}
+              title="Bajar uno"
             >
               ↓
+            </button>
+            <button 
+              onClick={() => moveToExtreme(index, 'top')} 
+              disabled={index === 0 || saving}
+              className={`${styles.actionBtn} ${styles.extremeBtn}`}
+              title="Mover al principio"
+            >
+              ↑↑
+            </button>
+            <button 
+              onClick={() => moveToExtreme(index, 'bottom')} 
+              disabled={index === books.length - 1 || saving}
+              className={`${styles.actionBtn} ${styles.extremeBtn}`}
+              title="Mover al final"
+            >
+              ↓↓
             </button>
           </div>
         </div>

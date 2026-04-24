@@ -22,7 +22,7 @@ export default async function StatsPage() {
   const readingBooks = books.filter(b => b.status === "READING").length;
   const wantToReadBooks = books.filter(b => b.status === "WANT_TO_READ").length;
   
-  const totalHours = books.reduce((acc, b) => acc + (b.readingHours || 0), 0);
+  const ownedBooks = books.filter(b => b.ownershipStatus === "OWNED").length;
   const averageRating = books.filter(b => b.rating).reduce((acc, b, _, arr) => acc + (b.rating || 0) / arr.length, 0);
 
   return (
@@ -42,8 +42,8 @@ export default async function StatsPage() {
           <p className={styles.statValue}>{readBooks}</p>
         </div>
         <div className={`${styles.statCard} glass`}>
-          <h3>Horas Totales</h3>
-          <p className={styles.statValue}>{totalHours.toFixed(1)}h</p>
+          <h3>Comprados</h3>
+          <p className={styles.statValue}>{ownedBooks}</p>
         </div>
         <div className={`${styles.statCard} glass`}>
           <h3>Media Valoración</h3>

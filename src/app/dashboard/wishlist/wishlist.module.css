@@ -114,6 +114,13 @@
   cursor: not-allowed;
 }
 
+.extremeBtn {
+  background: rgba(var(--primary-rgb), 0.1);
+  border-color: rgba(var(--primary-rgb), 0.2);
+  color: var(--primary);
+  font-weight: 800;
+}
+
 .savingOverlay {
   position: fixed;
   bottom: 2rem;
