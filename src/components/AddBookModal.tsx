@@ -79,6 +79,7 @@ export default function AddBookModal({ onClose, bookToEdit }: AddBookModalProps)
   // Manual search only (triggered by button or Enter)
 
   const searchBooks = async (query: string) => {
+    if (!query.trim() || isSearching) return;
     // Cancel previous request if any
     if (searchAbortController.current) {
       searchAbortController.current.abort();
@@ -328,7 +329,7 @@ export default function AddBookModal({ onClose, bookToEdit }: AddBookModalProps)
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Escribe título o autor para buscar..."
-                      onKeyDown={(e) => e.key === 'Enter' && searchBooks(searchQuery)}
+                      onKeyDown={(e) => e.key === 'Enter' && !isSearching && searchBooks(searchQuery)}
                     />
                     <button type="button" onClick={() => searchBooks(searchQuery)} disabled={isSearching}>
                       {isSearching ? "..." : "Buscar"}
