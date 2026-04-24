@@ -441,6 +441,23 @@
   color: white;
   font-weight: 600;
   cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.searchBox button:hover {
+  background: var(--primary-glow);
+  transform: translateY(-1px);
+}
+
+.noResults {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(239, 68, 68, 0.05);
+  border: 1px dashed rgba(239, 68, 68, 0.3);
+  border-radius: 12px;
+  color: #f87171;
+  font-size: 0.9rem;
+  text-align: center;
 }
 
 .searchResults {

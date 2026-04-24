@@ -296,9 +296,18 @@ export default function AddBookModal({ onClose, bookToEdit }: AddBookModalProps)
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Escribe título o autor para buscar..."
+                      onKeyDown={(e) => e.key === 'Enter' && searchBooks(searchQuery)}
                     />
+                    <button type="button" onClick={() => searchBooks(searchQuery)} disabled={isSearching}>
+                      {isSearching ? "..." : "Buscar"}
+                    </button>
                   </div>
                 </div>
+                {searchQuery.length > 2 && !isSearching && searchResults.length === 0 && (
+                  <p className={styles.noResults}>
+                    No hay resultados. ¡Inténtalo con otros términos o insértalo manualmente abajo!
+                  </p>
+                )}
                 {searchResults.length > 0 && (
                   <div className={styles.searchResults}>
                     {searchResults.map((item) => (
