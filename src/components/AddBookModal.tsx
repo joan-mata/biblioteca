@@ -75,18 +75,7 @@ export default function AddBookModal({ onClose, bookToEdit }: AddBookModalProps)
     }
   };
 
-  // Search as you type with debounce
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (searchQuery.length > 2) {
-        searchBooks(searchQuery);
-      } else {
-        setSearchResults([]);
-      }
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [searchQuery]);
+  // Manual search only (triggered by button or Enter)
 
   const searchBooks = async (query: string) => {
     // Cancel previous request if any
