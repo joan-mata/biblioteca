@@ -648,3 +648,40 @@
     flex-direction: column;
   }
 }
+
+.checkboxLabel {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+  cursor: pointer;
+  background: rgba(251, 191, 36, 0.05);
+  padding: 0.8rem 1.25rem;
+  border-radius: 12px;
+  border: 1px dashed rgba(251, 191, 36, 0.2);
+  margin-top: 1rem;
+  transition: all 0.2s ease;
+}
+
+.checkboxLabel:hover {
+  background: rgba(251, 191, 36, 0.1);
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+.checkboxLabel input[type="checkbox"] {
+  width: 1.2rem;
+  height: 1.2rem;
+  cursor: pointer;
+  accent-color: #fbbf24;
+}
+
+.favStar {
+  margin-left: 0.75rem;
+  font-size: 1.5rem;
+  animation: bounce-fav 2s infinite;
+  display: inline-block;
+}
+
+@keyframes bounce-fav {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2) rotate(10deg); }
+}

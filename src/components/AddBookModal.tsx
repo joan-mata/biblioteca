@@ -29,6 +29,7 @@ export default function AddBookModal({ onClose, bookToEdit }: AddBookModalProps)
   const [startedAt, setStartedAt] = useState(bookToEdit?.startedAt?.split('T')[0] || "");
   const [finishedAt, setFinishedAt] = useState(bookToEdit?.finishedAt?.split('T')[0] || "");
   const [readingHours, setReadingHours] = useState(bookToEdit?.readingHours?.toString() || "");
+  const [isFavorite, setIsFavorite] = useState(bookToEdit?.isFavorite || false);
   
   // Search state
   const [searchQuery, setSearchQuery] = useState("");
@@ -172,6 +173,7 @@ export default function AddBookModal({ onClose, bookToEdit }: AddBookModalProps)
       startedAt: startedAt ? new Date(startedAt).toISOString() : null,
       finishedAt: finishedAt ? new Date(finishedAt).toISOString() : null,
       readingHours: readingHours ? parseFloat(readingHours) : null,
+      isFavorite,
     };
 
     try {
@@ -250,7 +252,10 @@ export default function AddBookModal({ onClose, bookToEdit }: AddBookModalProps)
                 )}
               </div>
               <div className={styles.viewInfo}>
-                <h1 className={styles.viewTitle}>{bookToEdit.title}</h1>
+                <h1 className={styles.viewTitle}>
+                  {bookToEdit.title} 
+                  {bookToEdit.isFavorite && <span className={styles.favStar} title="¡Libro favorito!">🌟</span>}
+                </h1>
                 <p className={styles.viewAuthor}>por {bookToEdit.author}</p>
                 <div className={styles.viewBadges}>
                   <span className={`${styles.viewBadge} ${styles[bookToEdit.status.toLowerCase()]}`}>
@@ -390,6 +395,20 @@ export default function AddBookModal({ onClose, bookToEdit }: AddBookModalProps)
                     placeholder="https://... o ruta local"
                   />
                 </div>
+              </div>
+
+              <div className={styles.inputGroup}>
+                <label className={styles.checkboxLabel}>
+                  <input 
+                    type="checkbox" 
+                    checked={isFavorite} 
+                    onChange={(e) => setIsFavorite(e.target.checked)}
+                  />
+                  <span>✨ Marcar como libro favorito (Super Ultra Estrella 🌟)</span>
+                </label>
+              </div>
+
+              <div className={styles.row}>
                 <div className={styles.inputGroup}>
                   <label>Imagen Local</label>
                   <div className={styles.fileUpload}>

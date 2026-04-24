@@ -19,6 +19,8 @@ export interface Book {
   startedAt: string | null;
   finishedAt: string | null;
   readingHours: number | null;
+  isFavorite: boolean;
+  wishlistOrder: number | null;
   userId: string;
   createdAt: string;
   updatedAt: string;

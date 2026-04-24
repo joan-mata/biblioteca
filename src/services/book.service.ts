@@ -104,6 +104,8 @@ export class BookService {
         startedAt: data.startedAt ? new Date(data.startedAt as string) : null,
         finishedAt: data.finishedAt ? new Date(data.finishedAt as string) : null,
         readingHours: data.readingHours != null ? Math.min(LIMITS.readingHours, Math.max(0, Number(data.readingHours))) : null,
+        isFavorite: !!data.isFavorite,
+        wishlistOrder: data.wishlistOrder != null ? Number(data.wishlistOrder) : null,
         userId,
       },
     });
@@ -144,6 +146,8 @@ export class BookService {
         startedAt: data.startedAt ? new Date(data.startedAt as string) : null,
         finishedAt: data.finishedAt ? new Date(data.finishedAt as string) : null,
         readingHours: data.readingHours != null ? Math.min(LIMITS.readingHours, Math.max(0, Number(data.readingHours))) : null,
+        isFavorite: data.isFavorite !== undefined ? !!data.isFavorite : existing.isFavorite,
+        wishlistOrder: data.wishlistOrder !== undefined ? (data.wishlistOrder != null ? Number(data.wishlistOrder) : null) : existing.wishlistOrder,
       },
     });
   }

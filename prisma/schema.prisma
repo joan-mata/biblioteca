@@ -41,6 +41,8 @@ model Book {
   startedAt      DateTime? @map("started_at") @db.Date
   finishedAt     DateTime? @map("finished_at") @db.Date
   readingHours   Float?    @map("reading_hours")
+  isFavorite     Boolean   @default(false) @map("is_favorite")
+  wishlistOrder  Int?      @map("wishlist_order")
   
   userId         String    @map("user_id") @db.Uuid
   user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)

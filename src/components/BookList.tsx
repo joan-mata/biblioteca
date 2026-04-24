@@ -169,6 +169,9 @@ export default function BookList({ initialBooks }: { initialBooks: Book[] }) {
             style={{ cursor: "pointer" }}
           >
             <div className={styles.cardBadges}>
+              {book.isFavorite && (
+                <span className={`${styles.badge} ${styles.favoriteBadge}`} title="¡Libro favorito!">🌟</span>
+              )}
               {book.ownershipStatus === "OWNED" && (
                 <span className={`${styles.badge} ${styles.ownedBadge}`} title="Comprado">🏠</span>
               )}
@@ -202,12 +205,13 @@ export default function BookList({ initialBooks }: { initialBooks: Book[] }) {
                   <h3 className={styles.bookTitle}>{book.title}</h3>
                   <p className={styles.bookAuthor}>{book.author}</p>
                 </div>
-                {book.status === "READ" && book.rating !== null && (
-                  <div className={styles.rating}>
-                    <StarRating rating={book.rating} onChange={() => {}} editable={false} />
-                  </div>
-                )}
               </div>
+              
+              {book.status === "READ" && book.rating !== null && (
+                <div className={styles.rating}>
+                  <StarRating rating={book.rating} onChange={() => {}} editable={false} />
+                </div>
+              )}
 
               {view === "list" && book.summary && (
                 <p className={styles.summary}>{book.summary.substring(0, 150)}...</p>
