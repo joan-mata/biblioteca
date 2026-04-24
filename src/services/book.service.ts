@@ -23,6 +23,12 @@ export class BookService {
         personalReview: data.personalReview,
         rating: data.rating,
         status: data.status || "READ",
+        purchaseDate: data.purchaseDate,
+        isOwned: data.isOwned || false,
+        ownershipStatus: data.ownershipStatus || "NONE",
+        startedAt: data.startedAt,
+        finishedAt: data.finishedAt,
+        readingHours: data.readingHours,
         userId: userId,
       },
     });
@@ -48,6 +54,12 @@ export class BookService {
         personalReview: data.personalReview,
         rating: data.rating,
         status: data.status,
+        purchaseDate: data.purchaseDate,
+        isOwned: data.isOwned,
+        ownershipStatus: data.ownershipStatus,
+        startedAt: data.startedAt,
+        finishedAt: data.finishedAt,
+        readingHours: data.readingHours,
       },
     });
   }

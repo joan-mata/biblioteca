@@ -19,17 +19,11 @@
   font-size: 1.5rem;
   font-weight: 800;
   letter-spacing: -0.04em;
+  text-decoration: none;
 }
 
-.logo span:first-child {
-  color: var(--foreground);
-}
-
-.logo span:last-child {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
+.biblio { color: #ffffff; }
+.teca { color: #d946ef; }
 
 .navLinks {
   display: flex;

@@ -16,6 +16,8 @@ services:
     networks:
       - biblioteca-net
       - proxy-net  # Required for Cloudflare/Nginx in homelab
+    volumes:
+      - ./public/uploads:/app/public/uploads
 
 # Optional: Uncomment this if you don't have an external Postgres database
 #   db:

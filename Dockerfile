@@ -1,5 +1,6 @@
 # Base image
 FROM node:20-alpine AS base
+ENV PRISMA_CLIENT_ENGINE_TYPE library
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -20,12 +21,13 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED 1
 
+# Mock DATABASE_URL during build to avoid Prisma/Next.js static generation errors
+ENV DATABASE_URL=postgresql://mock:mock@localhost:5432/mock
+
 # Generate Prisma Client
 RUN npx prisma generate
 
 # Build the application
-# Mock DATABASE_URL during build to avoid Prisma/Next.js static generation errors
-ENV DATABASE_URL=postgresql://mock:mock@localhost:5432/mock
 RUN npm run build
 
 # Production image, copy all the files and run next
@@ -48,6 +50,16 @@ RUN chown nextjs:nodejs .next
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+COPY --chown=nextjs:nodejs start.sh ./start.sh
+
+# Install prisma CLI globally to ensure it's available for start.sh
+RUN npm install -g prisma@6.2.1
+RUN chmod +x ./start.sh
+
+# Ensure the nextjs user can write to the uploads directory if needed
+# (though it's usually a volume, but good to have)
+RUN chown -R nextjs:nodejs /app
 
 USER nextjs
 
@@ -56,6 +68,4 @@ EXPOSE 3000
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 
-# server.js is created by next build from the standalone output
-# https://nextjs.org/docs/pages/api-reference/next-config-js/output
-CMD ["node", "server.js"]
+CMD ["./start.sh"]

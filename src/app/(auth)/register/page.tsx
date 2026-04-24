@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 import styles from "./auth.module.css";
 
 export default function RegisterPage() {
@@ -34,7 +35,20 @@ export default function RegisterPage() {
       const data = await res.json();
 
       if (res.ok) {
-        router.push("/login?registered=true");
+        // Automatic login after registration
+        const result = await signIn("credentials", {
+          redirect: false,
+          email,
+          password,
+        });
+
+        if (result?.error) {
+          setError("Cuenta creada, pero hubo un error al iniciar sesión automáticamente");
+          router.push("/login");
+        } else {
+          router.push("/dashboard");
+          router.refresh();
+        }
       } else {
         setError(data.error || "Error al registrarse");
       }
@@ -50,7 +64,7 @@ export default function RegisterPage() {
       <div className={`${styles.authCard} glass`}>
         <div className={styles.header}>
           <Link href="/" className={styles.logo}>
-            <span>Bibliot</span><span>eca</span>
+            <span className={styles.biblio}>Biblio</span><span className={styles.teca}>teca</span>
           </Link>
           <h1>Crea tu cuenta</h1>
           <p>Empieza a organizar tu colección hoy mismo</p>

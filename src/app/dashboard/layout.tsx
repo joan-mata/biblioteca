@@ -16,20 +16,22 @@ export default async function DashboardLayout({
 
   return (
     <div className={styles.layout}>
-      <aside className={styles.sidebar}>
-        <div className={styles.logo}>
-          <span>Bibliot</span><span>eca</span>
+      <header className={styles.header}>
+        <div className={styles.headerLeft}>
+          <Link href="/dashboard" className={styles.logo}>
+            <span className={styles.biblio}>Biblio</span><span className={styles.teca}>teca</span>
+          </Link>
+          <nav className={styles.nav}>
+            <Link href="/dashboard" className={styles.navLink}>📚 Libros</Link>
+            <Link href="/dashboard/stats" className={styles.navLink}>📊 Stats</Link>
+            <Link href="/dashboard/settings" className={styles.navLink}>⚙️ Ajustes</Link>
+          </nav>
         </div>
-        <nav className={styles.nav}>
-          <Link href="/dashboard" className={styles.navLink}>📚 Mis Libros</Link>
-          <Link href="/dashboard/stats" className={styles.navLink}>📊 Estadísticas</Link>
-          <Link href="/dashboard/settings" className={styles.navLink}>⚙️ Ajustes</Link>
-        </nav>
-        <div className={styles.sidebarFooter}>
-          <p>{session.user?.email}</p>
-          <Link href="/api/auth/signout" className={styles.logoutBtn}>Cerrar Sesión</Link>
+        <div className={styles.headerRight}>
+          <span className={styles.userEmail}>{session.user?.email}</span>
+          <Link href="/api/auth/signout" className={styles.logoutBtn}>Salir</Link>
         </div>
-      </aside>
+      </header>
       <main className={styles.content}>
         {children}
       </main>

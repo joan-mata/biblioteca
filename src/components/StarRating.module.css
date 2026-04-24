@@ -1,0 +1,28 @@
+.starRating {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.star {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--foreground-muted);
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.star.filled {
+  color: #fbbf24;
+  text-shadow: 0 0 8px rgba(251, 191, 36, 0.4);
+}
+
+.star:not(:disabled):hover {
+  transform: scale(1.2);
+}
+
+.star:disabled {
+  cursor: default;
+}

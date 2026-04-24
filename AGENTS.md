@@ -16,6 +16,11 @@ Este documento sirve como manual de instrucciones para que cualquier IA (Claude,
 3.  **Estética Premium**:
     -   Utilizar siempre variables de CSS definidas en `globals.css`.
     -   Mantener el estilo **Glassmorphism** para componentes elevados.
+    -   **Scroll Lock**: Al implementar modales, usar el patrón `document.body.style.overflow = "hidden"` para evitar scroll en el fondo.
+
+4.  **Seguridad de Media**:
+    -   Las imágenes de usuario no deben servirse como archivos estáticos si requieren privacidad.
+    -   Usar rutas de API dinámicas (`/api/uploads/[filename]`) con verificación de sesión para servir archivos sensibles.
 
 ## 🛠️ Cómo Extender el Proyecto
 
@@ -28,7 +33,12 @@ Este documento sirve como manual de instrucciones para que cualquier IA (Claude,
 
 -   **Mantenimiento**:
     -   Siempre verificar los lints con `npm run lint`.
-    -   Asegurarse de que el `Dockerfile` sigue siendo válido para compilaciones en entornos aislados.
+    -   **Docker Offline**: El Dockerfile instala `prisma` globalmente. Al actualizar el esquema, es crucial reconstruir la imagen (`--build`) para que `start.sh` pueda sincronizar la base de datos sin internet.
+
+## 📋 Lógica de Negocio Específica
+
+-   **Propiedad**: El estado de propiedad tiene 3 niveles: `OWNED` (Comprado), `WISHLIST` (Deseado), `NONE` (No comprar).
+-   **Defaults**: Al añadir un libro, el estado de propiedad por defecto debe ser `WISHLIST`.
 
 ---
 *Heed these rules to preserve the soul of the project.*

@@ -21,18 +21,15 @@
 
 .logo {
   font-family: 'Outfit', sans-serif;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 800;
-  margin-bottom: 1.5rem;
-  display: inline-block;
+  margin-bottom: 1rem;
+  display: block;
+  text-decoration: none;
 }
 
-.logo span:first-child { color: var(--foreground); }
-.logo span:last-child {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
+.biblio { color: #ffffff; }
+.teca { color: #d946ef; }
 
 .header h1 {
   font-size: 1.75rem;

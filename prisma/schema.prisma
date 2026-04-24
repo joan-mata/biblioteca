@@ -8,6 +8,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
   schemas  = ["biblioteca"]
 }
 
@@ -24,18 +25,27 @@ model User {
 }
 
 model Book {
-  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   title          String
   author         String
-  photoUrl       String?  @map("photo_url")
+  photoUrl       String?   @map("photo_url")
   summary        String?
   rating         Int?
-  personalReview String?  @map("personal_review")
-  status         String   @default("READ")
-  userId         String   @map("user_id") @db.Uuid
-  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz
-  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+  personalReview String?   @map("personal_review")
+  status         String    @default("READ") // WANT_TO_READ, READING, READ, OWNED
+  
+  // New fields
+  purchaseDate   DateTime? @map("purchase_date") @db.Date
+  isOwned        Boolean   @default(false) @map("is_owned")
+  ownershipStatus String   @default("NONE") @map("ownership_status") // OWNED, WISHLIST, NONE
+  startedAt      DateTime? @map("started_at") @db.Date
+  finishedAt     DateTime? @map("finished_at") @db.Date
+  readingHours   Float?    @map("reading_hours")
+  
+  userId         String    @map("user_id") @db.Uuid
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
 
   @@index([userId], map: "idx_books_user")
   @@map("books")

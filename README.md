@@ -1,20 +1,24 @@
 # Biblioteca 📚
 
-Una plataforma premium y moderna para gestionar tu colección personal de libros. Diseñada para ser elegante, rápida y 100% replicable.
+Una plataforma premium y moderna para gestionar tu colección personal de libros. Diseñada para ser elegante, rápida y 100% segura para entornos homelab.
 
 ## 🚀 Características
 
-- **Diseño Moderno**: Interfaz con Glassmorphism, modo oscuro y micro-animaciones.
-- **Gestión Completa**: Controla libros leídos, por leer y en tu estantería física.
-- **Arquitectura Limpia**: Código estructurado con separación de responsabilidades (Servicios, API, UI).
-- **Despliegue con Docker**: Lista para ser desplegada en segundos.
+- **Diseño Premium**: Interfaz con **Glassmorphism**, modo oscuro, micro-animaciones y diseño **ultra-responsive**.
+- **Gestión Avanzada**: Controla libros leídos, por leer y tu lista de deseos con un sistema de 3 estados:
+    - 🏠 **Comprado**: Libros que ya posees.
+    - ✨ **Deseado**: Tu lista de deseos personal (estado por defecto al añadir).
+    - 🚫 **No comprar**: Libros que no te interesan adquirir.
+- **Seguridad de Media**: Acceso a imágenes de portadas protegido por sesión. Solo usuarios autenticados pueden ver las fotos subidas.
+- **Arquitectura MVC**: Código estructurado con clara separación entre Servicios, API y UI.
+- **Despliegue Offline**: Optimizado para servidores locales sin acceso constante a internet mediante instalación global de dependencias en Docker.
 
 ## 🛠️ Instalación Rápida
 
 ### Requisitos Previos
 
 - [Docker](https://www.docker.com/) y [Docker Compose](https://docs.docker.com/compose/)
-- [Node.js 20+](https://nodejs.org/) (opcional, para desarrollo local)
+- [PostgreSQL](https://www.postgresql.org/) (o usar el contenedor compartido configurado en `.env`)
 
 ### Configuración
 
@@ -27,7 +31,7 @@ Una plataforma premium y moderna para gestionar tu colección personal de libros
 2. **Preparar variables de entorno:**
    ```bash
    cp .env.example .env
-   # Edita el archivo .env con tus credenciales
+   # Edita el archivo .env con tus credenciales y DATABASE_URL
    ```
 
 3. **Levantar con Docker:**
@@ -35,21 +39,17 @@ Una plataforma premium y moderna para gestionar tu colección personal de libros
    docker compose up -d --build
    ```
 
-## 🏗️ Arquitectura (MVC)
+## 🏗️ Guía para Desarrolladores (IA y Humanos)
 
-El proyecto sigue una estructura modular para facilitar la mantenibilidad:
-
-- `src/app/`: Rutas y páginas (Vistas).
-- `src/services/`: Lógica de negocio (Controladores).
-- `prisma/`: Definición de la base de datos (Modelos).
-- `src/components/`: Componentes UI reutilizables.
-- `src/types/`: Interfaces y tipos compartidos.
+Este proyecto está diseñado para ser mantenido por agentes de IA. Consulta los siguientes archivos para más detalles:
+- [AGENTS.md](./AGENTS.md): Principios arquitectónicos y reglas de oro.
+- [CLAUDE.md](./CLAUDE.md): Comandos útiles y estado del proyecto.
 
 ## 🔒 Seguridad
 
-- Autenticación con **NextAuth**.
+- Autenticación robusta con **NextAuth**.
 - Cifrado de contraseñas con **Bcrypt**.
-- Aislamiento de base de datos mediante esquemas de PostgreSQL.
+- **Acceso Protegido a Media**: Las imágenes subidas no son públicas; se sirven a través de `/api/uploads` validando la sesión del usuario.
 
 ---
 Creado con ❤️ por [Joan Mata](https://joanmata.com)

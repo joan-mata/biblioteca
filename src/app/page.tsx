@@ -1,13 +1,21 @@
 import styles from "./page.module.css";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerSession();
+
+  if (session) {
+    redirect("/dashboard");
+  }
+
   return (
     <main className={styles.main}>
       <nav className={styles.navbar}>
-        <div className={styles.logo}>
-          <span>Bibliot</span><span>eca</span>
-        </div>
+          <Link href="/" className={styles.logo}>
+            <span className={styles.biblio}>Biblio</span><span className={styles.teca}>teca</span>
+          </Link>
         <div className={styles.navLinks}>
           <Link href="/login" className={styles.loginBtn}>Iniciar Sesión</Link>
           <Link href="/register" className={styles.registerBtn}>Registrarse</Link>

@@ -42,7 +42,7 @@ export default function LoginPage() {
       <div className={`${styles.authCard} glass`}>
         <div className={styles.header}>
           <Link href="/" className={styles.logo}>
-            <span>Bibliot</span><span>eca</span>
+            <span className={styles.biblio}>Biblio</span><span className={styles.teca}>teca</span>
           </Link>
           <h1>Bienvenido de nuevo</h1>
           <p>Introduce tus credenciales para acceder</p>
