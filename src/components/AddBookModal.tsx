@@ -63,8 +63,8 @@ export default function AddBookModal({ onClose, bookToEdit }: AddBookModalProps)
       });
       const data = await res.json();
       if (data.url) {
-        // Point to our new custom serving route
-        setPhotoUrl(`/api${data.url}`);
+        // The API already returns the full /api/uploads/... path
+        setPhotoUrl(data.url);
       }
     } catch (error) {
       console.error("Upload error:", error);
