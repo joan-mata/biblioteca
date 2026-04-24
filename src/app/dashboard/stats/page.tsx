@@ -28,7 +28,7 @@ export default async function StatsPage() {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <h1>Estadísticas</h1>
+        <h1 className="text-gradient">Estadísticas</h1>
         <p>Un resumen visual de tu progreso literario.</p>
       </header>
 

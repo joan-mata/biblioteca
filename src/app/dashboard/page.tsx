@@ -25,7 +25,7 @@ export default async function DashboardPage() {
   return (
     <div className={styles.page}>
       <header className={styles.pageHeader}>
-        <h1>Mis Libros</h1>
+        <h1>Mis <span className="text-gradient">Libros</span></h1>
         <p>Gestiona tu colección y lleva un registro de tus lecturas.</p>
       </header>
 

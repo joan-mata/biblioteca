@@ -19,7 +19,7 @@ export default async function DashboardLayout({
       <header className={styles.header}>
         <div className={styles.headerLeft}>
           <Link href="/dashboard" className={styles.logo}>
-            <span className={styles.biblio}>Biblio</span><span className={styles.teca}>teca</span>
+            <span className={styles.biblio}>Biblio</span><span className={`${styles.teca} text-gradient`}>teca</span>
           </Link>
           <nav className={styles.nav}>
             <Link href="/dashboard" className={styles.navLink}>📚 Libros</Link>
