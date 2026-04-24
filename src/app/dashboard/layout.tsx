@@ -23,7 +23,7 @@ export default async function DashboardLayout({
           </Link>
           <nav className={styles.nav}>
             <Link href="/dashboard" className={styles.navLink}>📚 Libros</Link>
-            <Link href="/dashboard/wishlist" className={styles.navLink}>✨ Deseados</Link>
+            <Link href="/dashboard/wishlist" className={styles.navLink}>✨ Por leer</Link>
             <Link href="/dashboard/stats" className={styles.navLink}>📊 Stats</Link>
             <Link href="/dashboard/settings" className={styles.navLink}>⚙️ Ajustes</Link>
           </nav>

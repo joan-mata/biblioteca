@@ -255,7 +255,9 @@ export default function AddBookModal({ onClose, bookToEdit }: AddBookModalProps)
               <div className={styles.viewInfo}>
                 <h1 className={styles.viewTitle}>
                   {bookToEdit.title} 
-                  {bookToEdit.isFavorite && <span className={styles.favStar} title="¡Libro favorito!">🌟</span>}
+                  {bookToEdit.isFavorite && bookToEdit.status === "READ" && (
+                    <span className={styles.favStar} title="¡Libro favorito!">🌟</span>
+                  )}
                 </h1>
                 <p className={styles.viewAuthor}>por {bookToEdit.author}</p>
                 <div className={styles.viewBadges}>
@@ -398,16 +400,18 @@ export default function AddBookModal({ onClose, bookToEdit }: AddBookModalProps)
                 </div>
               </div>
 
-              <div className={styles.inputGroup}>
-                <label className={styles.checkboxLabel}>
-                  <input 
-                    type="checkbox" 
-                    checked={isFavorite} 
-                    onChange={(e) => setIsFavorite(e.target.checked)}
-                  />
-                  <span>✨ Marcar como libro favorito (Super Ultra Estrella 🌟)</span>
-                </label>
-              </div>
+              {status === "READ" && (
+                <div className={styles.inputGroup}>
+                  <label className={styles.checkboxLabel}>
+                    <input 
+                      type="checkbox" 
+                      checked={isFavorite} 
+                      onChange={(e) => setIsFavorite(e.target.checked)}
+                    />
+                    <span>✨ Marcar como libro favorito (Super Ultra Estrella 🌟)</span>
+                  </label>
+                </div>
+              )}
 
               <div className={styles.row}>
                 <div className={styles.inputGroup}>

@@ -169,7 +169,7 @@ export default function BookList({ initialBooks }: { initialBooks: Book[] }) {
             style={{ cursor: "pointer" }}
           >
             <div className={styles.cardBadges}>
-              {book.isFavorite && (
+              {book.isFavorite && book.status === "READ" && (
                 <span className={`${styles.badge} ${styles.favoriteBadge}`} title="¡Libro favorito!">🌟</span>
               )}
               {book.ownershipStatus === "OWNED" && (
