@@ -399,11 +399,6 @@ export default function AddBookModal({ onClose, bookToEdit }: AddBookModalProps)
                     placeholder="https://... o ruta local"
                   />
                 </div>
-              </div>
-
-
-
-              <div className={styles.row}>
                 <div className={styles.inputGroup}>
                   <label>Imagen Local</label>
                   <div className={styles.fileUpload}>
@@ -420,6 +415,7 @@ export default function AddBookModal({ onClose, bookToEdit }: AddBookModalProps)
                   </div>
                 </div>
               </div>
+
 
               <div className={styles.row}>
                 <div className={styles.inputGroup}>
