@@ -79,6 +79,7 @@ export default function AddBookModal({ onClose, bookToEdit }: AddBookModalProps)
   // Manual search only (triggered by button or Enter)
 
   const searchBooks = async (query: string) => {
+    console.log("🔍 Triggering manual search for:", query);
     if (!query.trim() || isSearching) return;
     // Cancel previous request if any
     if (searchAbortController.current) {
