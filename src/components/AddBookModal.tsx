@@ -92,15 +92,15 @@ export default function AddBookModal({ onClose, bookToEdit }: AddBookModalProps)
     setIsSearching(true);
     setSearchError(null);
     try {
-      const res = await fetch(
-        `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=5`,
-        { signal: controller.signal }
-      );
+      const apiKey = process.env.NEXT_PUBLIC_GOOGLE_BOOKS_API_KEY;
+      const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=5${apiKey ? `&key=${apiKey}` : ""}`;
+      
+      const res = await fetch(url, { signal: controller.signal });
       
       if (!res.ok) {
         // If it's a rate limit (429), give a specific message
         if (res.status === 429) {
-           throw new Error("Demasiadas búsquedas. Espera unos segundos.");
+           throw new Error("Límite de Google excedido. Espera unos segundos o usa una API Key.");
         }
         throw new Error(`Error de API: ${res.status}`);
       }
