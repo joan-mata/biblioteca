@@ -5,16 +5,13 @@ import { getServerSession } from "next-auth";
 
 // ─── Security constants ───────────────────────────────────────────────────────
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB limit
-const ALLOWED_MIME_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/avif"];
-const ALLOWED_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif"];
+const ALLOWED_MIME_TYPES = ["image/jpeg", "image/png"];
+const ALLOWED_EXTENSIONS = [".jpg", ".jpeg", ".png"];
 
 // Magic bytes for image validation (prevents MIME type spoofing)
 const IMAGE_MAGIC_BYTES: Record<string, number[][]> = {
   "image/jpeg": [[0xff, 0xd8, 0xff]],
   "image/png":  [[0x89, 0x50, 0x4e, 0x47]],
-  "image/webp": [[0x52, 0x49, 0x46, 0x46]], // RIFF header
-  "image/gif":  [[0x47, 0x49, 0x46, 0x38]], // GIF8
-  "image/avif": [[0x00, 0x00, 0x00]], // ftyp box (checked loosely)
 };
 
 function validateMagicBytes(buffer: Buffer, mimeType: string): boolean {

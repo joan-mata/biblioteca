@@ -83,6 +83,27 @@ button, .btn {
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--glass-border);
   border-radius: 20px;
+  color: var(--foreground);
+}
+
+/* Ensure inputs using .glass class show light text in dark mode */
+input.glass,
+select.glass {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  outline: none;
+}
+
+input.glass::placeholder {
+  color: var(--foreground-muted);
+}
+
+input.glass:focus,
+select.glass:focus {
+  border-color: var(--primary);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
 }
 
 .container {

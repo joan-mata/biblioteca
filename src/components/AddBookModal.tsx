@@ -354,7 +354,7 @@ export default function AddBookModal({ onClose, bookToEdit }: AddBookModalProps)
                   <div className={styles.fileUpload}>
                     <input 
                       type="file" 
-                      accept="image/*" 
+                      accept="image/jpeg,image/png,.jpg,.jpeg,.png" 
                       onChange={handleFileUpload} 
                       id="file-upload"
                       className={styles.fileInput}
