@@ -3,6 +3,8 @@ import { getServerSession } from "next-auth";
 import { BookService } from "@/services/book.service";
 import { prisma } from "@/lib/prisma";
 
+const MAX_BODY_SIZE = 25 * 1024; // 25 KB
+
 async function getAuthenticatedUser(session: any) {
   if (!session?.user?.email) return null;
   return prisma.user.findUnique({
@@ -19,7 +21,19 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
+    // Body size guard
+    const contentLength = req.headers.get("content-length");
+    if (contentLength && parseInt(contentLength) > MAX_BODY_SIZE) {
+      return NextResponse.json({ error: "Solicitud demasiado grande" }, { status: 413 });
+    }
+
     const { id } = await params;
+
+    // Basic ID validation before hitting the service
+    if (!id || typeof id !== "string" || id.length > 64) {
+      return NextResponse.json({ error: "ID inválido" }, { status: 400 });
+    }
+
     const data = await req.json();
     const book = await BookService.updateBook(user.id, id, data);
 
@@ -43,6 +57,11 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
     }
 
     const { id } = await params;
+
+    if (!id || typeof id !== "string" || id.length > 64) {
+      return NextResponse.json({ error: "ID inválido" }, { status: 400 });
+    }
+
     await BookService.deleteBook(user.id, id);
     return NextResponse.json({ message: "Libro eliminado correctamente" });
   } catch (error: any) {

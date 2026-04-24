@@ -5,6 +5,9 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
+// ─── Body size limit (prevent large payload DoS) ─────────────────────────────
+const MAX_BODY_SIZE = 25 * 1024; // 25 KB — more than enough for book data
+
 async function getAuthenticatedUser(session: any) {
   if (!session?.user?.email) return null;
   return prisma.user.findUnique({
@@ -19,6 +22,12 @@ export async function POST(req: Request) {
 
     if (!user) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+
+    // Body size guard
+    const contentLength = req.headers.get("content-length");
+    if (contentLength && parseInt(contentLength) > MAX_BODY_SIZE) {
+      return NextResponse.json({ error: "Solicitud demasiado grande" }, { status: 413 });
     }
 
     const data = await req.json();
@@ -47,9 +56,6 @@ export async function GET(req: Request) {
     return NextResponse.json(books);
   } catch (error: any) {
     console.error("Book Fetch API Error:", error);
-    return NextResponse.json(
-      { error: "Error al obtener libros" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Error al obtener libros" }, { status: 500 });
   }
 }
