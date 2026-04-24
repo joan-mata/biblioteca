@@ -34,6 +34,7 @@ export default function AddBookModal({ onClose, bookToEdit }: AddBookModalProps)
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
 
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -88,12 +89,21 @@ export default function AddBookModal({ onClose, bookToEdit }: AddBookModalProps)
 
   const searchBooks = async (query: string) => {
     setIsSearching(true);
+    setSearchError(null);
     try {
       const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=5`);
+      if (!res.ok) {
+        throw new Error(`Error de API: ${res.status}`);
+      }
       const data = await res.json();
       setSearchResults(data.items || []);
-    } catch (error) {
+      if (!data.items) {
+        // No results is handled in UI, but we ensure list is empty
+        setSearchResults([]);
+      }
+    } catch (error: any) {
       console.error("Search error:", error);
+      setSearchError("Hubo un problema al conectar con la base de datos de libros. Revisa tu conexión.");
     } finally {
       setIsSearching(false);
     }
@@ -303,7 +313,12 @@ export default function AddBookModal({ onClose, bookToEdit }: AddBookModalProps)
                     </button>
                   </div>
                 </div>
-                {searchQuery.length > 2 && !isSearching && searchResults.length === 0 && (
+                {searchError && (
+                  <p className={styles.noResults}>
+                    ❌ {searchError}
+                  </p>
+                )}
+                {searchQuery.length > 2 && !isSearching && !searchError && searchResults.length === 0 && (
                   <p className={styles.noResults}>
                     No hay resultados. ¡Inténtalo con otros términos o insértalo manualmente abajo!
                   </p>

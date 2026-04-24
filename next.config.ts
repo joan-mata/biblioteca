@@ -42,8 +42,8 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
       // Allow images from self, data URIs, and external book cover sources
-      "img-src 'self' data: blob: https: http:",
-      "connect-src 'self' https://www.googleapis.com",
+      "img-src 'self' data: blob: https: http: *.google.com *.googleapis.com",
+      "connect-src 'self' https://www.googleapis.com https://books.google.com",
       "frame-ancestors 'none'",
       "base-uri 'self'",
       "form-action 'self'",
