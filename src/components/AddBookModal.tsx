@@ -343,10 +343,10 @@ export default function AddBookModal({ onClose, bookToEdit }: AddBookModalProps)
                 <div className={styles.inputGroup}>
                   <label>URL de la Foto</label>
                   <input 
-                    type="url" 
+                    type="text" 
                     value={photoUrl} 
                     onChange={(e) => setPhotoUrl(e.target.value)} 
-                    placeholder="https://..."
+                    placeholder="https://... o ruta local"
                   />
                 </div>
                 <div className={styles.inputGroup}>
