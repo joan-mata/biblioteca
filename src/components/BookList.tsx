@@ -10,7 +10,7 @@ type SortField = "title" | "author" | "purchaseDate" | "finishedAt";
 type SortDir = "asc" | "desc";
 
 export default function BookList({ initialBooks }: { initialBooks: Book[] }) {
-  const [view, setView] = useState<"grid" | "list">("grid");
+  const [view, setView] = useState<"grid" | "list" | "compact">("grid");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
   const [ownedFilter, setOwnedFilter] = useState<"ALL" | "OWNED" | "WISHLIST" | "NONE">("ALL");
@@ -100,10 +100,11 @@ export default function BookList({ initialBooks }: { initialBooks: Book[] }) {
                 田
               </button>
               <button
-                onClick={() => setView("list")}
-                className={view === "list" ? styles.active : ""}
+                onClick={() => setView(view === "list" ? "compact" : "list")}
+                className={view === "list" || view === "compact" ? styles.active : ""}
+                title={view === "list" ? "Cambiar a vista compacta" : "Cambiar a vista de lista"}
               >
-                ☰
+                {view === "compact" ? "☰" : "▤"}
               </button>
             </div>
             <button className={styles.addBtn} onClick={() => setIsModalOpen(true)}>
@@ -160,65 +161,95 @@ export default function BookList({ initialBooks }: { initialBooks: Book[] }) {
 
       {isModalOpen && <AddBookModal onClose={handleCloseModal} bookToEdit={selectedBook} />}
 
-      <div className={view === "grid" ? styles.grid : styles.list}>
-        {filteredBooks.map((book) => (
-          <div
-            key={book.id}
-            className={`${styles.bookCard} glass animate-fade-in`}
-            onClick={() => handleEditBook(book)}
-            style={{ cursor: "pointer" }}
-          >
-            <div className={styles.cardBadges}>
-              {book.isFavorite && book.status === "READ" && (
-                <span className={`${styles.badge} ${styles.favoriteBadge}`} title="¡Libro favorito!">🌟</span>
-              )}
-              {book.ownershipStatus === "OWNED" && (
-                <span className={`${styles.badge} ${styles.ownedBadge}`} title="Comprado">🏠</span>
-              )}
-              {book.ownershipStatus === "WISHLIST" && (
-                <span className={`${styles.badge} ${styles.wishlistBadge}`} title="Deseado">✨</span>
-              )}
-              {book.ownershipStatus === "NONE" && (
-                <span className={`${styles.badge} ${styles.noneBadge}`} title="No comprar">🚫</span>
-              )}
-              <span className={`${styles.badge} ${styles.statusBadge} ${styles[book.status.toLowerCase()]}`}>
-                {book.status === "READ" ? "✓" : book.status === "READING" ? "📖" : "⏳"}
-              </span>
-            </div>
+      <div className={`${styles.container} ${styles[view]}`}>
+        {filteredBooks.map((book) => {
+          if (view === "compact") {
+            return (
+              <div
+                key={book.id}
+                className={`${styles.compactRow} glass animate-fade-in`}
+                onClick={() => handleEditBook(book)}
+              >
+                <div className={styles.compactLeft}>
+                  <h4 className={styles.compactTitle}>{book.title}</h4>
+                  <p className={styles.compactAuthor}>{book.author}</p>
+                </div>
+                <div className={styles.compactRight}>
+                  {book.status === "READ" && book.rating !== null && (
+                    <div className={styles.compactRating}>
+                      {"★".repeat(book.rating)}{"☆".repeat(5 - book.rating)}
+                    </div>
+                  )}
+                  <div className={styles.compactBadges}>
+                    {book.isFavorite && book.status === "READ" && <span title="Favorito">🌟</span>}
+                    {book.ownershipStatus === "OWNED" && <span title="En casa">🏠</span>}
+                    {book.ownershipStatus === "WISHLIST" && <span title="Deseado">✨</span>}
+                    <span className={`${styles.statusDot} ${styles[book.status.toLowerCase()]}`} title={book.status}></span>
+                  </div>
+                </div>
+              </div>
+            );
+          }
 
-            {(view === "grid" || book.photoUrl) && (
-              <div className={styles.coverWrapper}>
-                {book.photoUrl ? (
-                  <img src={book.photoUrl} alt={book.title} className={styles.cover} />
-                ) : (
-                  <div className={styles.placeholderCover}>
-                    <h3 className={styles.placeholderTitle}>{book.title}</h3>
-                    <p className={styles.placeholderAuthor}>{book.author}</p>
+          return (
+            <div
+              key={book.id}
+              className={`${styles.bookCard} glass animate-fade-in`}
+              onClick={() => handleEditBook(book)}
+              style={{ cursor: "pointer" }}
+            >
+              <div className={styles.cardBadges}>
+                {book.isFavorite && book.status === "READ" && (
+                  <span className={`${styles.badge} ${styles.favoriteBadge}`} title="¡Libro favorito!">🌟</span>
+                )}
+                {book.ownershipStatus === "OWNED" && (
+                  <span className={`${styles.badge} ${styles.ownedBadge}`} title="Comprado">🏠</span>
+                )}
+                {book.ownershipStatus === "WISHLIST" && (
+                  <span className={`${styles.badge} ${styles.wishlistBadge}`} title="Deseado">✨</span>
+                )}
+                {book.ownershipStatus === "NONE" && (
+                  <span className={`${styles.badge} ${styles.noneBadge}`} title="No comprar">🚫</span>
+                )}
+                <span className={`${styles.badge} ${styles.statusBadge} ${styles[book.status.toLowerCase()]}`}>
+                  {book.status === "READ" ? "✓" : book.status === "READING" ? "📖" : "⏳"}
+                </span>
+              </div>
+
+              {(view === "grid" || book.photoUrl) && (
+                <div className={styles.coverWrapper}>
+                  {book.photoUrl ? (
+                    <img src={book.photoUrl} alt={book.title} className={styles.cover} />
+                  ) : (
+                    <div className={styles.placeholderCover}>
+                      <h3 className={styles.placeholderTitle}>{book.title}</h3>
+                      <p className={styles.placeholderAuthor}>{book.author}</p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <div className={styles.bookDetails}>
+                <div className={styles.bookHeaderRow}>
+                  <div className={styles.titleAuthor}>
+                    <h3 className={styles.bookTitle}>{book.title}</h3>
+                    <p className={styles.bookAuthor}>{book.author}</p>
+                  </div>
+                </div>
+                
+                {book.status === "READ" && book.rating !== null && (
+                  <div className={styles.rating}>
+                    <StarRating rating={book.rating} onChange={() => {}} editable={false} />
                   </div>
                 )}
-              </div>
-            )}
 
-            <div className={styles.bookDetails}>
-              <div className={styles.bookHeaderRow}>
-                <div className={styles.titleAuthor}>
-                  <h3 className={styles.bookTitle}>{book.title}</h3>
-                  <p className={styles.bookAuthor}>{book.author}</p>
-                </div>
+                {view === "list" && book.summary && (
+                  <p className={styles.summary}>{book.summary.substring(0, 150)}...</p>
+                )}
               </div>
-              
-              {book.status === "READ" && book.rating !== null && (
-                <div className={styles.rating}>
-                  <StarRating rating={book.rating} onChange={() => {}} editable={false} />
-                </div>
-              )}
-
-              {view === "list" && book.summary && (
-                <p className={styles.summary}>{book.summary.substring(0, 150)}...</p>
-              )}
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {filteredBooks.length === 0 && (

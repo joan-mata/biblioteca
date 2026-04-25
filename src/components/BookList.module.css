@@ -360,3 +360,88 @@
     max-width: 100%;
   }
 }
+.compact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.compactRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.compactRow:hover {
+  transform: translateX(5px);
+  border-color: var(--primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.compactLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.compactTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.compactAuthor {
+  font-size: 0.85rem;
+  color: var(--foreground-muted);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.compactRight {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-shrink: 0;
+}
+
+.compactRating {
+  color: #fbbf24;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  font-family: monospace;
+}
+
+.compactBadges {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.statusDot.read { background: #6ee7b7; box-shadow: 0 0 8px rgba(110, 231, 183, 0.5); }
+.statusDot.reading { background: #93c5fd; box-shadow: 0 0 8px rgba(147, 197, 253, 0.5); }
+.statusDot.want_to_read { background: #a5b4fc; box-shadow: 0 0 8px rgba(165, 180, 252, 0.5); }
+
+@media (max-width: 768px) {
+  .compactRight {
+    gap: 0.75rem;
+  }
+  .compactRating {
+    display: none;
+  }
+}
