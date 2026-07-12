@@ -1,12 +1,13 @@
 import { getServerSession } from "next-auth";
 import { prisma } from "@/lib/prisma";
 import styles from "./settings.module.css";
+import TelegramSettings from "./TelegramSettings";
 
 export const dynamic = "force-dynamic";
 
 export default async function SettingsPage() {
   const session = await getServerSession();
-  
+
   const user = await prisma.user.findUnique({
     where: { email: session?.user?.email as string },
   });
@@ -31,6 +32,11 @@ export default async function SettingsPage() {
             <span>Rol:</span>
             <strong>{user.role}</strong>
           </div>
+        </section>
+
+        <section className={`${styles.section} glass`}>
+          <h3>Bot de Telegram</h3>
+          <TelegramSettings />
         </section>
 
         <section className={`${styles.section} glass`}>

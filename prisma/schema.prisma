@@ -13,14 +13,30 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  email     String   @unique
-  password  String
-  role      String   @default("user")
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
-  books     Book[]
+  id               String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email            String       @unique
+  password         String
+  role             String       @default("user")
+  telegramBotToken String?      @unique @map("telegram_bot_token")
+  createdAt        DateTime     @default(now()) @map("created_at") @db.Timestamptz
+  books            Book[]
+  botSessions      BotSession[]
 
   @@map("users")
+  @@schema("biblioteca")
+}
+
+model BotSession {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  chatId    String   @map("chat_id")
+  userId    String   @map("user_id") @db.Uuid
+  state     String   @default("IDLE")
+  data      Json?
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([chatId, userId])
+  @@map("bot_sessions")
   @@schema("biblioteca")
 }
 
