@@ -94,17 +94,28 @@ export default function AddBookModal({ onClose, bookToEdit }: AddBookModalProps)
     try {
       const apiKey = process.env.NEXT_PUBLIC_GOOGLE_BOOKS_API_KEY;
       const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=5${apiKey ? `&key=${apiKey}` : ""}`;
-      
-      const res = await fetch(url, { signal: controller.signal });
-      
+
+      const maxRetries = 2;
+      let res: Response;
+      let attempt = 0;
+      while (true) {
+        res = await fetch(url, { signal: controller.signal });
+        if (res.ok || res.status !== 503 || attempt >= maxRetries) break;
+        attempt++;
+        await new Promise((r) => setTimeout(r, 500 * attempt));
+      }
+
       if (!res.ok) {
         // If it's a rate limit (429), give a specific message
         if (res.status === 429) {
            throw new Error("Límite de Google excedido. Espera unos segundos o usa una API Key.");
         }
+        if (res.status === 503) {
+           throw new Error("El servicio de Google Books no está disponible ahora mismo. Inténtalo de nuevo en unos segundos.");
+        }
         throw new Error(`Error de API: ${res.status}`);
       }
-      
+
       const data = await res.json();
       
       // Only update if this is still the active request
@@ -119,8 +130,8 @@ export default function AddBookModal({ onClose, bookToEdit }: AddBookModalProps)
         return; // Ignore cancelled requests
       }
       console.error("Search error:", error);
-      setSearchError(error.message.includes("Demasiadas") 
-        ? error.message 
+      setSearchError(error.message.includes("Google")
+        ? error.message
         : "Hubo un problema al conectar con la base de datos de libros. Revisa tu conexión.");
     } finally {
       if (!controller.signal.aborted) {
